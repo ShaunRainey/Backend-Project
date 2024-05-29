@@ -14,8 +14,8 @@ describe('/api/topics', () => {
         .get('/api/topics')
         .expect(200)
         .then((response) => {
-          expect(response.body.topics.length).toBe(3);
-          response.body.topics.forEach((topic) => {
+          expect(response.body.length).toBe(3);
+          response.body.forEach((topic) => {
             expect(topic).toMatchObject({
                 slug: expect.any(String),
                 description: expect.any(String)
@@ -39,6 +39,7 @@ describe('/api', () => {
     .get('/api')
     .expect(200)
     .then((response) => {
+      
       expect(response.body.endPoints).toEqual(jsonRef)
     })
   })
