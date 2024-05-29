@@ -43,3 +43,28 @@ describe('/api', () => {
     })
   })
 })
+
+describe.skip('/api/articles/:article_id', ()=>{
+  test('Get:200 sends an object matching the article requested', ()=>{
+    return request(app)
+    .get('/api/articles/5')
+    .expect(200)
+    .then((response) => {
+      expect(response.body).toMatchObject({
+        author: expect.any(String), 
+        title: expect.any(String),
+        article_id: expect.any(Number),
+        body: expect.any(String), 
+        topic: expect.any(String),
+        created_at: expect.any(Date),
+        votes: expect.any(integer),
+        article_img_url: expect.any(String)
+      })
+    })
+  })
+  test('Get:400 responds with an error message when given an invalid id',() => {
+  })
+
+  test('Get:404 responds with an error message when given a valid but non-existent id',()=> {
+  })
+})
