@@ -5,12 +5,13 @@ exports.getArticles = (req, res, next) => {
   selectArticles().then((articles) => {
     res.status(200).send({ articles });
   })
-  .catch((err) => {next(err)});
+  .catch(next);
 };
 
 exports.getArticlesById = (req, res, next) => {
-  selectArticlesById().then((articles) => {
-    res.status(200).send({ articles });
+  const articleId = req.params.article_id;
+  selectArticlesById(articleId).then((article) => {
+    res.status(200).send({ article });
   })
-  .catch((err) => {next(err)});
+  .catch(next);
 };
