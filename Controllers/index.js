@@ -1,4 +1,6 @@
-const {getTopics} = require('./topic.controller');
-const {getEndpoints} = require('./endPoints.controller');
+const {getTopics} = require('./topicController');
+const {getEndpoints} = require('./endPointsController');
+const {getArticles} = require('./articlesController')
+const {getArticlesById} = require('./articlesController');
 
-module.exports = {getTopics, getEndpoints}
+module.exports = {getTopics, getEndpoints, getArticles, getArticlesById}
