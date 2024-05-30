@@ -10,15 +10,12 @@ exports.selectArticles = ((next) => {
     a.created_at,
     a.votes,
     a.article_img_url,
-    COUNT(c.article_id) AS comment_count
+    COUNT(c.article_id) :: INT AS comment_count
     FROM articles a
-    FULL JOIN comments c
+    LEFT JOIN comments c
       ON a.article_id = c.article_id
     GROUP BY a.article_id
     ORDER BY a.created_at DESC;`).then((result) => {
-      result.rows.map((row) => {
-        row.comment_count = Number(row.comment_count);
-      })
       return result.rows;
   })
   .catch(next);
@@ -36,3 +33,13 @@ exports.selectArticlesById = (articleId) => {
     return chosenArticle;
   })
 };
+
+exports.checkArticleExists = (articleId) => {
+  return db.query(`SELECT * FROM articles WHERE article_id =$1`,[articleId])
+  .then((articles) => {
+    if(!articles.rows.length){
+      return Promise.reject({status: 404, msg: 'Not Found'})
+    }
+  })
+
+}

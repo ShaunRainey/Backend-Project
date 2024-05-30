@@ -105,3 +105,41 @@ describe('/api/articles', () => {
       });
   })
 })
+
+describe('/api/articles/:article_id/comments', ()=>{
+  test('Get:200 sends an array of comments for the given article_id', ()=>{
+    return request(app)
+    .get('/api/articles/1/comments')
+    .expect(200)
+    .then((response) => {
+      expect(response.body.comments).toBeSortedBy('created_at',{descending: true})
+      response.body.comments.forEach((comment) =>{
+        expect(comment).toMatchObject({
+          comment_id: expect.any(Number),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          author: expect.any(String), 
+          body: expect.any(String), 
+          article_id: expect.any(Number),
+        })
+      })
+    })
+  })
+  test('Get:400 responds with an error message when given an invalid id',() => {
+    return request(app)
+    .get('/api/articles/HallelujahGoat/comments')
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toBe("Bad request");
+    });
+  })
+
+  test('Get:404 responds with an error message when given a valid but non-existent id',()=> {
+    return request(app)
+    .get('/api/articles/155/comments')
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe('Not Found');
+    });
+  })
+})
