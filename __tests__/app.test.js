@@ -109,7 +109,7 @@ describe('/api/articles', () => {
 describe('/api/articles/:article_id/comments', ()=>{
   test('Get:200 sends an array of comments for the given article_id', ()=>{
     return request(app)
-    .get('/api/articles/1/comments')
+    .get('/api/articles/3/comments')
     .expect(200)
     .then((response) => {
       expect(response.body.comments).toBeSortedBy('created_at',{descending: true})
@@ -141,5 +141,51 @@ describe('/api/articles/:article_id/comments', ()=>{
     .then((response) => {
       expect(response.body.msg).toBe('Not Found');
     });
+  })
+})
+
+describe('Post request /api/articles/:article_id/comments',() => {
+  test('POST:201 adds a comment to specified article with correct shape',() => {
+    const newComment = {
+      username:'butter_bridge',
+      body: 'Immortal'
+    }
+    return request(app)
+    .post('/api/articles/3/comments')
+    .send(newComment)
+    .expect(201)
+    .then((response)=> {
+      expect(response.body.comment.author).toBe(newComment.username)
+      expect(response.body.comment.body).toBe(newComment.body)
+      expect(response.body.comment)
+    })
+  })
+  test('POST:400 responds with an error message when given an invalid id', () => {
+
+    const newComment = {
+      username:'butter_bridge',
+      body: 'Immortal'
+    }
+    return request(app)
+    .post('/api/articles/iNeedPizza/comments')
+    .send(newComment)
+    .expect(400)
+    .then((response)=> {
+      expect(response.body.msg).toBe('Bad request')
+  })
+  })
+  test('POST:404 responds with an error message when given a valid but non-existent id', () => {
+
+    const newComment = {
+      username:'butter_bridge',
+      body: 'Immortal'
+    }
+    return request(app)
+    .post('/api/articles/07734/comments')
+    .send(newComment)
+    .expect(404)
+    .then((response)=> {
+      expect(response.body.msg).toBe('Not Found');
+  })
   })
 })
