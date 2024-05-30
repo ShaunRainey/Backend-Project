@@ -45,28 +45,6 @@ describe('/api', () => {
   })
 })
 
-describe('/api/articles', () => {
-  test('GET:200 sends an array of all articles to the client', () => {
-    return request(app)
-      .get('/api/articles')
-      .expect(200)
-      .then((response) => {
-        expect(response.body.articles.length).toBe(13);
-        response.body.articles.forEach((article) => {
-          expect(article).toMatchObject({
-              title: expect.any(String),
-              topic: expect.any(String),
-              author: expect.any(String),
-              body: expect.any(String),
-              created_at: expect.any(String),
-              votes: expect.any(Number),
-              article_img_url: expect.any(String)
-          });
-        });
-      });
-  })
-})
-
 describe('/api/articles/:article_id', ()=>{
   test('Get:200 sends an object matching the article requested', ()=>{
     return request(app)
@@ -101,5 +79,29 @@ describe('/api/articles/:article_id', ()=>{
     .then((response) => {
       expect(response.body.msg).toBe('article does not exist');
     });
+  })
+})
+
+describe('/api/articles', () => {
+  test('GET:200 sends an articles array of article objects with desired properties', () => {
+    return request(app)
+      .get('/api/articles')
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles.length).toBe(13);
+        expect(response.body.articles).toBeSortedBy('created_at',{descending: true})
+        response.body.articles.forEach((article) => {
+          expect(article).toMatchObject({
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              article_id: expect.any(Number),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(Number)
+          });
+        });
+      });
   })
 })
