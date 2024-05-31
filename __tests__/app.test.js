@@ -264,3 +264,29 @@ describe('Delete request /api/comments/:comment_id', ()=>{
     })
   })
 })
+
+describe('/api/users', () => {
+  test('GET:200 sends an array of all users to the client', () => {
+    return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then((response) => {
+        expect(response.body.length).toBe(4);
+        response.body.forEach((user) => {
+          expect(user).toMatchObject({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+          });
+        });
+      });
+  })
+  test('GET:404 error when given an invalid URL',() => {
+    return request(app)
+    .get('/api/Fiji')
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe("URL doesn't exist")
+    })
+  })
+})
