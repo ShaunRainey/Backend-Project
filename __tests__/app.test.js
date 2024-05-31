@@ -189,3 +189,136 @@ describe('Post request /api/articles/:article_id/comments',() => {
   })
   })
 })
+
+describe('Patch request /api/articles/:article_id', () => {
+  test('Patch:200 updates an article when given a valid article id', () =>{
+    const patchObject = {inc_votes: 120}
+    return request(app)
+    .patch('/api/articles/3')
+    .send(patchObject)
+    .expect(200)
+    .then((response)=> {
+      expect(response.body.article).toEqual({
+        article_id: 3,
+        title: 'Eight pug gifs that remind me of mitch',
+        topic: 'mitch',
+        author: 'icellusedkars',
+        body: 'some gifs',
+        created_at: '2020-11-03T09:12:00.000Z',
+        votes: 120,
+        article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+      })
+    })
+  })
+  test('Patch:404 responds with an error message when given a valid but non-existent id', () => {
+    
+    const patchObject = {inc_votes: 120}
+    
+    return request(app)
+    .patch('/api/articles/07734')
+    .send(patchObject)
+    .expect(404)
+    .then((response)=> {
+      expect(response.body.msg).toBe('Not Found');
+    })
+  })
+  test('Patch:400 responds with an error message when given an invalid id', () => {
+  
+    const patchObject = {inc_votes: 120}
+  
+    return request(app)
+    .patch('/api/articles/burgersToo')
+    .send(patchObject)
+    .expect(400)
+    .then((response)=> {
+      expect(response.body.msg).toBe('Bad request')
+  })
+  })
+})
+
+describe('Delete request /api/comments/:comment_id', ()=>{
+  test('Delete:204 deletes a comment when given a valid comment id',() =>{
+    return request(app)
+    .delete('/api/comments/3')
+    .expect(204)
+    .then((response)=>{ 
+      expect(!response.rows)
+    })
+  })
+  test('Delete:404 responds with an error message when given a valid but non-existent id', () => {
+    
+    return request(app)
+    .delete('/api/comments/3142')
+    .expect(404)
+    .then((response)=> {
+      expect(response.body.msg).toBe('Not Found');
+    })
+  })
+  test('Delete:400 responds with an error message when given an invalid id', () => {
+    
+    return request(app)
+    .delete('/api/comments/GitGudScrub')
+    .expect(400)
+    .then((response)=> {
+      expect(response.body.msg).toBe('Bad request');
+    })
+  })
+})
+
+describe('/api/users', () => {
+  test('GET:200 sends an array of all users to the client', () => {
+    return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then((response) => {
+        expect(response.body.length).toBe(4);
+        response.body.forEach((user) => {
+          expect(user).toMatchObject({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+          });
+        });
+      });
+  })
+  test('GET:404 error when given an invalid URL',() => {
+    return request(app)
+    .get('/api/Fiji')
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe("URL doesn't exist")
+    })
+  })
+})
+
+describe('/api/articles', () => {
+  test('GET:200 sends an articles array of articles filtered by the query', () => {
+    return request(app)
+      .get('/api/articles?topic=cats')
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles.length).toBe(1);
+        expect(response.body.articles).toBeSortedBy('created_at',{descending: true})
+        response.body.articles.forEach((article) => {
+          expect(article.topic).toBe('cats')
+          expect(article).toMatchObject({
+              title: expect.any(String),
+              author: expect.any(String),
+              article_id: expect.any(Number),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(Number)
+          });
+        });
+      });
+  })
+  test('GET:400 sends an error message if given an invalid query', () => {
+    return request(app)
+      .get('/api/articles?topic=cfsbdfb')
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe('Invalid Query')
+        })
+      })
+    })
