@@ -37,7 +37,23 @@ exports.selectArticles = ((topicValue,next) => {
 });
 
 exports.selectArticlesById = (articleId) => {
-  return db.query('SELECT * FROM articles WHERE article_id = $1', [articleId]).then((result) => {
+  return db.query(`SELECT 
+  a.author, 
+  a.title, 
+  a.article_id, 
+  a.topic,
+  a.created_at,
+  a.votes,
+  a.body,
+  a.article_img_url,
+  COUNT(c.article_id) :: INT AS comment_count
+  FROM articles a
+  LEFT JOIN comments c
+    ON a.article_id = c.article_id
+  WHERE a.article_id = $1
+  GROUP BY a.article_id
+  ORDER BY a.created_at DESC;`, [articleId])  
+  .then((result) => {
     const chosenArticle = result.rows[0]
     if(!chosenArticle){
       return Promise.reject({
