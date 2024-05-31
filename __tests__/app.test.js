@@ -322,3 +322,23 @@ describe('/api/articles', () => {
         })
       })
     })
+describe('/api/articles/:article_id (comment_count)', ()=> {
+  test('GET:200 sends the desired article with comment count added',()=> {
+    return request(app)
+    .get('/api/articles/3')
+    .expect(200)
+    .then((response) => {
+        expect(response.body.article).toMatchObject({
+            title: expect.any(String),
+            topic: expect.any(String),
+            body: expect.any(String),
+            author: expect.any(String),
+            article_id: expect.any(Number),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(Number)
+        })
+      })
+    })
+  })
