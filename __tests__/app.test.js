@@ -290,3 +290,35 @@ describe('/api/users', () => {
     })
   })
 })
+
+describe('/api/articles', () => {
+  test('GET:200 sends an articles array of articles filtered by the query', () => {
+    return request(app)
+      .get('/api/articles?topic=cats')
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles.length).toBe(1);
+        expect(response.body.articles).toBeSortedBy('created_at',{descending: true})
+        response.body.articles.forEach((article) => {
+          expect(article.topic).toBe('cats')
+          expect(article).toMatchObject({
+              title: expect.any(String),
+              author: expect.any(String),
+              article_id: expect.any(Number),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(Number)
+          });
+        });
+      });
+  })
+  test('GET:400 sends an error message if given an invalid query', () => {
+    return request(app)
+      .get('/api/articles?topic=cfsbdfb')
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe('Invalid Query')
+        })
+      })
+    })

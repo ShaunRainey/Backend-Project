@@ -6,7 +6,8 @@ const {insertComment} = require('../Models/index');
 const {updateArticle} = require('../Models/index')
 
 exports.getArticles = (req, res, next) => {
-  selectArticles().then((articles) => {
+  const topicValue = req.query.topic;
+  selectArticles(topicValue).then((articles) => {
     res.status(200).send({ articles });
   })
   .catch(next);
