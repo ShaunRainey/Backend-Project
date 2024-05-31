@@ -210,28 +210,57 @@ describe('Patch request /api/articles/:article_id', () => {
       })
     })
   })
-  test('POST:404 responds with an error message when given a valid but non-existent id', () => {
+  test('Patch:404 responds with an error message when given a valid but non-existent id', () => {
     
     const patchObject = {inc_votes: 120}
     
     return request(app)
-    .post('/api/articles/07734')
+    .patch('/api/articles/07734')
     .send(patchObject)
     .expect(404)
     .then((response)=> {
       expect(response.body.msg).toBe('Not Found');
     })
   })
-  test('POST:400 responds with an error message when given an invalid id', () => {
+  test('Patch:400 responds with an error message when given an invalid id', () => {
   
     const patchObject = {inc_votes: 120}
   
     return request(app)
-    .post('/api/articles/burgersToo')
+    .patch('/api/articles/burgersToo')
     .send(patchObject)
-    .expect(404)
+    .expect(400)
     .then((response)=> {
       expect(response.body.msg).toBe('Bad request')
   })
+  })
+})
+
+describe('Delete request /api/comments/:comment_id', ()=>{
+  test('Delete:204 deletes a comment when given a valid comment id',() =>{
+    return request(app)
+    .delete('/api/comments/3')
+    .expect(204)
+    .then((response)=>{ 
+      expect(!response.rows)
+    })
+  })
+  test('Delete:404 responds with an error message when given a valid but non-existent id', () => {
+    
+    return request(app)
+    .delete('/api/comments/3142')
+    .expect(404)
+    .then((response)=> {
+      expect(response.body.msg).toBe('Not Found');
+    })
+  })
+  test('Delete:400 responds with an error message when given an invalid id', () => {
+    
+    return request(app)
+    .delete('/api/comments/GitGudScrub')
+    .expect(400)
+    .then((response)=> {
+      expect(response.body.msg).toBe('Bad request');
+    })
   })
 })

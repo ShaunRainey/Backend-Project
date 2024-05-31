@@ -13,3 +13,17 @@ exports.insertComment = ({username, body, article_id}) => {
         return result.rows
     })
 }
+
+exports.checkCommentExists = (comment_id) => {
+    return db.query(`SELECT * FROM comments WHERE comment_id =$1`,[comment_id])
+    .then((comment) => {
+      if(!comment.rows.length){
+        return Promise.reject({status: 404, msg: 'Not Found'})
+      }
+    })
+  }
+
+exports.removeComment = (comment_id) => {
+    return db.query(`DELETE FROM comments WHERE comment_id = $1`,[comment_id])
+}
+
