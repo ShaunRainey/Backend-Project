@@ -3,7 +3,8 @@ const {getEndpoints} = require('./endPointsController');
 const {getArticles} = require('./articlesController')
 const {getArticlesById} = require('./articlesController');
 const {getCommentsForArticle} = require('./articlesController');
-const {postCommentsById} = require('./articlesController')
+const {postCommentsById} = require('./articlesController');
+const {patchArticleById} = require('./articlesController')
 
 module.exports = {
     getTopics, 
@@ -11,4 +12,5 @@ module.exports = {
     getArticles, 
     getArticlesById, 
     getCommentsForArticle, 
-    postCommentsById}
+    postCommentsById,
+    patchArticleById}

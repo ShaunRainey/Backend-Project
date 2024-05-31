@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
-const {getTopics, getEndpoints, getArticles, getArticlesById, getCommentsForArticle, postCommentsById} = require('./Controllers/index');
-const e = require('express');
+const {getTopics, getEndpoints, getArticles, getArticlesById, getCommentsForArticle, postCommentsById, patchArticleById } = require('./Controllers/index');
 
 app.use(express.json());
 
@@ -13,6 +12,7 @@ app.get('/api/articles', getArticles);
 app.get('/api/articles/:article_id', getArticlesById)
 app.get('/api/articles/:article_id/comments', getCommentsForArticle)
 app.post('/api/articles/:article_id/comments', postCommentsById)
+app.patch('/api/articles/:article_id', patchArticleById)
 
 app.use((err, req, res, next) => {
   if(err.code === "22P02"){
