@@ -292,7 +292,7 @@ describe('/api/users', () => {
 })
 
 describe('/api/articles', () => {
-  test('GET:200 sends an articles array of articles filtered by the query', () => {
+  test.only('GET:200 sends an articles array of articles filtered by the query', () => {
     return request(app)
       .get('/api/articles?topic=cats')
       .expect(200)

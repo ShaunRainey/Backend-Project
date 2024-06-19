@@ -16,7 +16,8 @@ exports.selectArticles = ((topicValue,next) => {
       ON a.article_id = c.article_id
     GROUP BY a.article_id
     ORDER BY a.created_at DESC;`).then((result) => {
-      const validTopics = ['cats', 'mitch']
+      const topicMap = result.rows.map((article)=>{return article.topic})
+      const validTopics = [...new Set(topicMap)]      
   
       if(topicValue){
         if(!validTopics.includes(topicValue)){
