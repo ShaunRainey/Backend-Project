@@ -117,11 +117,12 @@ article_id (required): The unique ID of the article.
 Example Response:
 
     {
-      body: "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
-      votes: 14,
-      author: "butter_bridge",
-      article_id: 1,
-      created_at: 1604113380000
+      "comment_id": 286,
+      "body": "Ut accusamus enim vel voluptate quae temporibus labore neque a. Reprehenderit iste est eos velit fugit vel quod velit.",
+      "article_id": 1,
+      "author": "cooljmessy",
+      "votes": 19,
+      "created_at": "2020-04-26T01:14:00.000Z"
     }
 
 ### POST /api/articles/:article_id/comments
