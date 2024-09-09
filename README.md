@@ -29,7 +29,7 @@ To set up the NC News API locally, follow these steps:
 * Run npm install
 * Add .env files (see NOTE below)
 * Run npm start 
-* Connect to the API using an app/browser
+* Connect to the API using an app/browser (browser example: http://localhost:9090/api/)
 
 Notes:
 * There are two seperate databases included within this project, one for testing and the other for production. In order to access either, please setup your .env files as appropriate.
