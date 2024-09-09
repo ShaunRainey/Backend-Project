@@ -161,8 +161,8 @@ comment_id (required): The unique ID of the comment.
 ### Error Handling
 Errors are handled using Express's next function. Common errors include:
 
-400 Bad Request: Invalid input data.
+400 Bad Request: Invalid input data
 
-404 Not Found: Resource not found.
+404 Not Found: Resource not found
 
-500 Internal Server Error: Server encountered an error.
+500 Internal Server Error: Server encountered an error
